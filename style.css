@@ -1,0 +1,160 @@
+.section {
+    width: 80%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+    margin: 0 auto;
+}
+
+/* --------------------------section1--------------------------------- */
+
+.section1 {
+    position: relative;
+}
+
+.user {
+    position: absolute;
+    top: 1%;
+    left: 5%;
+    width: 6%;
+    height: 8%;
+}
+
+.logo {
+    position: absolute;
+    top: -1%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 15%;
+    height: 12%;
+}
+
+.cart {
+    position: absolute;
+    top: 2%;
+    right: 5%;
+    width: 4%;
+    height: 6%;
+}
+
+
+/* -----------------navigation-------------------- */
+.navi {
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    top: 10%;
+    border-top: 2px solid black;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    text-align: center;
+
+}
+
+td.menu {
+    width: 70%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+    margin-top: 1.4%;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+a:hover {
+    color: rgb(107, 105, 105);
+}
+
+
+.home-icon {
+    margin-right: 15%;
+    width: 17%;
+    height: 13%;
+    color: white;
+    background-color: rgb(155, 216, 232);
+    border: 1px solid rgb(126, 191, 198);
+}
+
+.search-bar {
+    position: absolute;
+    top: 3.5%;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.search-bar input[type="text"] {
+    background-color: transparent;
+    border-color: transparent;
+
+}
+
+input:hover {
+    border: transparent;
+}
+
+.search-bar img {
+    margin-top: 8%;
+    margin-right: 0;
+    width: 10%;
+    height: 30%;
+    cursor: pointer;
+    border: none;
+}
+
+/* ------------------background---------------------- */
+.background {
+    position: absolute;
+    top: 22%;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    transition: opacity 0.5s ease;
+}
+
+.background:hover {
+    opacity: 0.8;
+}
+
+/* --------------------------section2--------------------------------- */
+
+.section2 {
+    background-color: #ccc;
+}
+
+/* --------------------------section3--------------------------------- */
+
+.section3 {
+    background-color: #dee799;
+}
+
+/* --------------------------section4--------------------------------- */
+.section4 {
+    background-color: #9be0e9;
+}
+
+/* --------------------------section5--------------------------------- */
+.section5 {
+    background-color: #a0a7e2;
+}
+
+/* --------------------------section6--------------------------------- */
+
+.section6 {
+    background-color: #dbb67b;
+}
