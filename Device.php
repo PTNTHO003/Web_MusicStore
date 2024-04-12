@@ -159,22 +159,25 @@ class Device
     function confirm_order($temp_order_id)
     {
         try {
+            // extract the temporary order
             $ord_sql = "SELECT * FROM T_TEMPORARY_ORDER WHERE TEMP_ORDER_ID = ?";
             $stmt_ord = $this->conn->prepare($ord_sql);
             $stmt_ord->bind_param("s", $temp_order_id);
             $stmt_ord->execute();
             $order_result = $stmt_ord->get_result()->fetch_assoc();
 
+            // extract all the devices of the temp order
             $dev_sql = "SELECT * FROM T_TEMPORARY_ORDER-DEVICES WHERE TEMP_ORDER_ID = ?";
             $stmt_dev = $this->conn->prepare($dev_sql);
             $stmt_dev->bind_param("s", $temp_order_id);
             $stmt_dev->execute();
             $dev_result = $stmt_dev->get_result()->fetch_all(MYSQLI_ASSOC);
 
+            // insert the order to the main order table
             $insert_order_sql = "INSERT INTO T_ORDER (ORDER_ID, CUSTOMER_PHONE, ORDER_DATETIME, ORDER_TOTAL_AMOUNT, 
                                 ORDER_NOTES) VALUES (?,?,?,?,?)";
             $stmt_insert_order = $this->conn->prepare($insert_order_sql);
-            $stmt_insert_order->bind_param("iits", $order_result['CustomerID'], $order_result['DeviceID'], $order_result['Quantity'], $order_result['OrderDateTime']);
+            $stmt_insert_order->bind_param("sits", $order_result['CustomerID'], $order_result['DeviceID'], $order_result['Quantity'], $order_result['OrderDateTime']);
             $stmt_insert_order->execute();
 
             foreach ($dev_result as $device) {

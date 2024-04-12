@@ -5,10 +5,111 @@ use `AudioShopDB`;
 drop table if exists `T_CATEGORY`;
 create table if not exists `T_CATEGORY` (
 	`CATE_ID` int(10) not null auto_increment,
-	`CATE_NAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `CATE_DESC` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+	`CATE_NAME` varchar(64)  DEFAULT NULL,
+    `CATE_DESC` varchar(255)  DEFAULT NULL,
   PRIMARY KEY (`CATE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ;
+
+-- Table structure for brand
+
+drop table if exists `T_BRAND`;
+create table if not exists `T_BRAND` (
+	`BRAND_ID` INT(10) not null auto_increment,
+    `BRAND_NAME` varchar(64)  NOT NULL,
+    `BRAND_DESCRIPTION` varchar(255)  DEFAULT NULL,
+    `BRAND_IMAGEURL` varchar(255)  DEFAULT NULL,
+    PRIMARY KEY (`BRAND_ID`)
+) ;
+
+-- Table structure for device table
+
+drop table if exists `T_DEVICE`;
+create table if not exists `T_DEVICE` (
+	`DEV_ID` INT(10) NOT NULL AUTO_INCREMENT,
+    `DEV_NAME` VARCHAR(255)  NOT NULL,
+    `CATE_ID` int(10) not null ,
+    `BRAND_ID` INT(10) not null,
+    `DEV_IMAGEURL` VARCHAR(255)  NOT NULL,
+    `DEV_PRICE` DECIMAL(12,2) NOT NULL,
+    primary key (`DEV_ID`),
+    foreign key (`CATE_ID`) references `T_CATEGORY` (`CATE_ID`),
+    foreign key (`BRAND_ID`) references `T_BRAND` (`BRAND_ID`)
+) ;
+
+-- Table structure for employee table
+
+drop table if exists `T_EMPLOYEE`;
+create table if not exists `T_EMPLOYEE` (
+	`EMP_ID` char (8) not null,
+    `EMP_NAME` varchar(255)  NOT NULL,
+    `EMP_ROLE` varchar(50)  NOT NULL,
+    `EMP_PHONE` varchar(11)  NOT NULL UNIQUE,
+    `EMP_EMAIL` varchar(255)  NOT NULL UNIQUE,
+    `EMP_ACCOUNT` varchar(255)  NOT NULL UNIQUE,
+    `EMP_PASSWORD` varchar(255)  NOT NULL,
+    PRIMARY KEY (`EMP_ID`)
+) ;
+
+-- Table structure for Customer
+
+drop table if exists `T_CUSTOMER`;
+create table if not exists `T_CUSTOMER` (
+	`CUSTOMER_PHONE` VARCHAR(11)  NOT NULL UNIQUE,
+    `CUSTOMER_NAME` VARCHAR(255)  NOT NULL,
+    `CUSTOMER_EMAIL` VARCHAR(255)  NOT NULL UNIQUE,
+    `CUSTOMER_ADDRESS` VARCHAR(255)  NOT NULL,
+    `CUSTOMER_ACCOUNT` VARCHAR(255)  NOT NULL unique,
+    `CUSTOMER_PASSWORD` VARCHAR(255)  NOT NULL,
+    primary key(`CUSTOMER_PHONE`)
+) ;
+
+-- table structure for order table
+
+drop table if exists `T_ORDER`;
+create table if not exists `T_ORDER` (
+	`ORDER_ID` CHAR(10)  NOT NULL UNIQUE,
+	`CUSTOMER_PHONE` VARCHAR(11)  NOT NULL,
+    `ORDER_DATETIME` timestamp default CURRENT_TIMESTAMP,
+    `ORDER_TOTAL_AMOUNT` decimal(12,2) not null,
+    `ORDER_NOTES` varchar(255) ,
+    primary key (`ORDER_ID`),
+    foreign key (`CUSTOMER_PHONE`) references `T_CUSTOMER` (`CUSTOMER_PHONE`)
+) ;
+
+-- table structure for table order-items
+
+drop table if exists `T_ORDER-DEVICES`;
+CREATE TABLE IF NOT EXISTS `T_ORDER-DEVICES` (
+    `ORDER_ID` CHAR(10)  NOT NULL,
+    `DEV_ID` INT(10) NOT NULL,
+    PRIMARY KEY (`ORDER_ID`, `DEV_ID`),
+    FOREIGN KEY (ORDER_ID) REFERENCES T_ORDER(ORDER_ID),
+    FOREIGN KEY (DEV_ID) REFERENCES T_DEVICE(DEV_ID)
+);
+
+-- table structure for table temporary order
+
+DROP TABLE IF EXISTS `T_TEMPORARY_ORDER`;
+CREATE TABLE IF NOT EXISTS `T_TEMPORARY_ORDER` (
+    `TEMP_ORDER_ID` INT AUTO_INCREMENT UNIQUE,
+    `CUSTOMER_PHONE` VARCHAR(11) NOT NULL,
+    `DEV_ID` INT(10) NOT NULL,
+    `Quantity` INT(12),
+    `OrderDateTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`TEMP_ORDER_ID`),
+    FOREIGN KEY (`CUSTOMER_PHONE`) REFERENCES `T_CUSTOMER`(`CUSTOMER_PHONE`),
+    FOREIGN KEY (`DEV_ID`) REFERENCES `T_DEVICE`(`DEV_ID`)
+);
+
+-- Table structure for table temporary order-devices
+DROP TABLE IF EXISTS `T_TEMPORARY_ORDER_DEVICES`;
+CREATE TABLE IF NOT EXISTS `T_TEMPORARY_ORDER_DEVICES` (
+    `TEMP_ORDER_ID` INT NOT NULL,
+    `DEV_ID` int(10) NOT NULL,
+    PRIMARY KEY (`TEMP_ORDER_ID`, `DEV_ID`),
+    FOREIGN KEY (`TEMP_ORDER_ID`) REFERENCES `T_TEMPORARY_ORDER`(`TEMP_ORDER_ID`),
+    FOREIGN KEY (`DEV_ID`) REFERENCES `T_DEVICE`(`DEV_ID`)
+);
 
 -- dumping data for t_category
 
@@ -23,16 +124,6 @@ values
 ('Wireless Speaker', 'Portable, Bluetooth-enabled audio streaming.'),
 ('Audio Accessories', 'Enhance your setup with cables, adapters, and more.');
 
--- Table structure for brand
-
-drop table if exists `T_BRAND`;
-create table if not exists `T_BRAND` (
-	`BRAND_ID` INT(10) not null auto_increment,
-    `BRAND_NAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `BRAND_DESCRIPTION` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `BRAND_IMAGEURL` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    PRIMARY KEY (`BRAND_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for t_brand
 
@@ -46,21 +137,6 @@ It is best known for its home audio systems and speakers, noise cancelling headp
 ('MARSHALL', 'Marshall, a legendary name in the world of music amplification, has been synonymous with powerful sound and iconic design for over 60 years. Founded by Jim Marshall, a shop owner and drummer, the company has left an indelible mark on the music industry.', 'Marshall_Logo.png'),
 ('YAMAHA', "As the world's leading manufacturer of musical instruments and audio equipment, Yamaha is uniquely positioned to express every sound as the artist intended. Sound that delivers incredibly detailed and accurate timbre in each note. 
 Sound experienced by the emotive contrast between stillness and motion.", 'Yamaha_Logo.png');
-
--- Table structure for device table
-
-drop table if exists `T_DEVICE`;
-create table if not exists `T_DEVICE` (
-	`DEV_ID` INT(10) NOT NULL AUTO_INCREMENT,
-    `DEV_NAME` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `CATE_ID` int(10) not null ,
-    `BRAND_ID` INT(10) not null,
-    `DEV_IMAGEURL` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `DEV_PRICE` DECIMAL(12,2) NOT NULL,
-    primary key (`DEV_ID`),
-    foreign key (`CATE_ID`) references `T_CATEGORY` (`CATE_ID`),
-    foreign key (`BRAND_ID`) references `T_BRAND` (`BRAND_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data into T_DEVICE
 
@@ -140,20 +216,6 @@ VALUES
 ('Audio Accessories HUC-SC020', 8, 5, 'YAMAHA-HUC-SC020.jpg', 39.00),
 ('Audio Accessories HBC-SC020', 8, 5, 'YAMAHA-HBC-SC020.jpg', 49.00);
 
--- Table structure for employee table
-
-drop table if exists `T_EMPLOYEE`;
-create table if not exists `T_EMPLOYEE` (
-	`EMP_ID` char (8) not null,
-    `EMP_NAME` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `EMP_ROLE` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `EMP_PHONE` varchar(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-    `EMP_EMAIL` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-    `EMP_ACCOUNT` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-    `EMP_PASSWORD` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    PRIMARY KEY (`EMP_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
-
 -- Dumping data into emp table 
 
 INSERT INTO `T_EMPLOYEE` (`EMP_ID`, `EMP_NAME`, `EMP_ROLE`, `EMP_PHONE`, `EMP_EMAIL`, `EMP_ACCOUNT`, `EMP_PASSWORD`)
@@ -162,19 +224,6 @@ values
 ('thoa0001', 'Pham Thi Ngoc Tho', 'admin', '0934567190', 'thoam1kaj@gmail.com', 'tho1112', '123'),
 ('longb0001', 'Quyen Chi Long', 'employee', '0734567890', 'long1928271@gmail.com', '123long', 'long123456'),
 ('nhanb0002', 'Lan Hoang Nha', 'employee', '0634567890', 'nhan102992@gmail.com', '10009nhan', 'nhan789');
-
--- Table structure for Customer
-
-drop table if exists `T_CUSTOMER`;
-create table if not exists `T_CUSTOMER` (
-	`CUSTOMER_PHONE` VARCHAR(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-    `CUSTOMER_NAME` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `CUSTOMER_EMAIL` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-    `CUSTOMER_ADDRESS` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `CUSTOMER_ACCOUNT` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL unique,
-    `CUSTOMER_PASSWORD` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    primary key(`CUSTOMER_PHONE`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data into customers table
 
@@ -185,50 +234,3 @@ VALUES
 ('07543210987', 'Sarah Brown', 'sarah@example.com', '987 Đường Số 3, Quận C, Thành phố Đà Nẵng', 'sarah_brown987', 'password765'),
 ('09432109876', 'Ryan Davis', 'ryan@example.com', '210 Đường Số 4, Quận D, Thành phố Cần Thơ', 'ryan_davis210', 'password654'),
 ('09321098765', 'Emma Wilson', 'emma@example.com', '543 Đường Số 5, Quận E, Thành phố Hải Phòng', 'emma_wilson543', 'password543');
-
--- table structure for order table
-
-drop table if exists `T_ORDER`;
-create table if not exists `T_ORDER` (
-	`ORDER_ID` CHAR(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,
-	`CUSTOMER_PHONE` VARCHAR(11) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `ORDER_DATETIME` timestamp default CURRENT_TIMESTAMP,
-    `ORDER_TOTAL_AMOUNT` decimal(12,2) not null,
-    `ORDER_NOTES` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-    primary key (`ORDER_ID`),
-    foreign key (`CUSTOMER_PHONE`) references `T_CUSTOMER` (`CUSTOMER_PHONE`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
-
--- table structure for table order-items
-
-drop table if exists `T_ORDER-DEVICES`;
-create table if not exists `T_ORDER-DEVICES` (
-	`ORDER_ID` char(10) NOT NULL,
-    `DEV_ID` char(100) NOT NULL,
-    primary key (`ORDER_ID`,`DEV_ID`),
-    foreign key (`ORDER_ID`) references `T_ORDER`(`ORDER_ID`),
-    foreign key (`DEV_ID`) references `T_DEVICE`(`DEV_ID`)
-);
-
--- table structure for table temporary order
-
-drop table if exists `T_TEMPORARY_ORDER`;
-create table if not exists `T_TEMPORARY_ORDER` (
-    `TEMP_ORDER_ID` INT AUTO_INCREMENT UNIQUE,
-    `CUSTOMER_PHONE` VARCHAR(11) NOT NULL,
-    `DEV_ID` CHAR(100) NOT NULL,
-    `Quantity` INT(12),
-    `OrderDateTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    primary key (`TEMP_ORDER_ID`),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
-    FOREIGN KEY (DeviceID) REFERENCES Devices(DeviceID)
-);
-
-drop table if exists `T_TEMPORARY_ORDER-DEVICES`;
-create table if not exists `T_TEMPORARY_ORDER-DEVICES` (
-	`TEMP_ORDER_ID` char(10) NOT NULL,
-    `DEV_ID` char(100) NOT NULL,
-    primary key (`TEMP_ORDER_ID`,`DEV_ID`),
-    foreign key (`TEMP_ORDER_ID`) references `T_TEMP_ORDER`(`TEMP_ORDER_ID`),
-    foreign key (`DEV_ID`) references `T_DEVICE`(`DEV_ID`)
-);
