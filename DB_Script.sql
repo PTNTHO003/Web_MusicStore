@@ -42,7 +42,6 @@ drop table if exists `T_EMPLOYEE`;
 create table if not exists `T_EMPLOYEE` (
 	`EMP_ID` char (8) not null,
     `EMP_NAME` varchar(255)  NOT NULL,
-    `EMP_ROLE` varchar(50)  NOT NULL,
     `EMP_PHONE` varchar(11)  NOT NULL UNIQUE,
     `EMP_EMAIL` varchar(255)  NOT NULL UNIQUE,
     `EMP_ACCOUNT` varchar(255)  NOT NULL UNIQUE,
@@ -218,10 +217,10 @@ VALUES
 
 -- Dumping data into emp table 
 
-INSERT INTO `T_EMPLOYEE` (`EMP_ID`, `EMP_NAME`, `EMP_ROLE`, `EMP_PHONE`, `EMP_EMAIL`, `EMP_ACCOUNT`, `EMP_PASSWORD`)
+INSERT INTO `T_EMPLOYEE` (`EMP_ID`, `EMP_NAME`, `EMP_PHONE`, `EMP_EMAIL`, `EMP_ACCOUNT`, `EMP_PASSWORD`)
 values
-('tama0001', 'Le Thanh Tam', 'admin', '0934567890', 'tamam1kaj@gmail.com', 'tam1008', '123'),
-('thoa0001', 'Pham Thi Ngoc Tho', 'admin', '0934567190', 'thoam1kaj@gmail.com', 'tho1112', '123'),
+('tama0001', 'Le Thanh Tam', '0934567890', 'tamam1kaj@gmail.com', 'admin', '123'),
+('thoa0001', 'Pham Thi Ngoc Tho', '0934567190', 'thoam1kaj@gmail.com', 'admin', '123'),
 ('longb0001', 'Quyen Chi Long', 'employee', '0734567890', 'long1928271@gmail.com', '123long', 'long123456'),
 ('nhanb0002', 'Lan Hoang Nha', 'employee', '0634567890', 'nhan102992@gmail.com', '10009nhan', 'nhan789');
 

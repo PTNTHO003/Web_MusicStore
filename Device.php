@@ -124,7 +124,6 @@ class Device
                 } else {
                     echo "Failed to remove device with ID $dev_id from the database.";
                 }
-
             } catch (Exception $e) {
                 die("Query failed: " . $e->getMessage());
             }
@@ -148,11 +147,9 @@ class Device
                 } else {
                     echo "Failed to update device information with ID $dev_id.";
                 }
-
             } catch (Exception $e) {
                 die("Query failed: " . $e->getMessage());
             }
-
         }
     }
 
@@ -177,44 +174,61 @@ class Device
             $insert_order_sql = "INSERT INTO T_ORDER (ORDER_ID, CUSTOMER_PHONE, ORDER_DATETIME, ORDER_TOTAL_AMOUNT, 
                                 ORDER_NOTES) VALUES (?,?,?,?,?)";
             $stmt_insert_order = $this->conn->prepare($insert_order_sql);
-            $stmt_insert_order->bind_param("sssis", $order_result['TEMP_ORDER_ID'], $order_result['CUSTOMER_PHONE'], 
-                                        $order_result['ORDER_DATETIME'], $order_result['TOTAL_AMOUNT'], $order_result['ORDER_NOTES']);
+            $stmt_insert_order->bind_param(
+                "sssis",
+                $order_result['TEMP_ORDER_ID'],
+                $order_result['CUSTOMER_PHONE'],
+                $order_result['ORDER_DATETIME'],
+                $order_result['TOTAL_AMOUNT'],
+                $order_result['ORDER_NOTES']
+            );
             $stmt_insert_order->execute();
 
-            // insert the devices of the order to the order-devices table
+            // Insert the devices of the order to the order-devices table
             $order_id = $order_result['TEMP_ORDER_ID'];
+
+            $insert_dev_sql = "INSERT INTO T_ORDER_DEVICES (ORDER_ID, DEV_ID) VALUES ";
+            $values = array();
+
             foreach ($dev_result as $device) {
-                $dev_id = $device['DEV_ID'];
-
-                $insert_dev_sql = "INSERT INTO T_ORDER_DEVICES (ORDER_ID, DEV_ID) VALUES (?, ?)";
-                $stmt_insert_dev = $this->conn->prepare($insert_dev_sql);
-                if (!$stmt_insert_dev) {
-                    die("Prepare failed: " . $this->conn->error);
-                }
-
-                $bind_result = $stmt_insert_dev->bind_param("iii", $order_id, $dev_id);
-                if (!$bind_result) {
-                    die("Binding parameters failed: " . $stmt_insert_dev->error);
-                }
-
-                $execute_result = $stmt_insert_dev->execute();
-                if (!$execute_result) {
-                    die("Execution failed: " . $stmt_insert_dev->error);
-                }
-
-                // If you need to handle success or do further processing, you can add code here
+                $insert_dev_sql .= "(?, ?),";
+                $values[] = $order_id;
+                $values[] = $device['DEV_ID'];
             }
-            $delete_order_sql = "DELETE FROM TemporaryOrders WHERE OrderID = ?";
+
+            // Remove the trailing comma and adding the semicolon to the end
+            $insert_dev_sql = rtrim($insert_dev_sql, ',') . ';';
+
+            $stmt_insert_dev = $this->conn->prepare($insert_dev_sql);
+            if (!$stmt_insert_dev) {
+                die("Prepare failed: " . $this->conn->error);
+            }
+
+            // Bind parameters
+            $types = str_repeat('ss', count($dev_result));
+            $stmt_insert_dev->bind_param($types, ...$values);
+
+            // Execute the statement
+            $execute_result = $stmt_insert_dev->execute();
+            if (!$execute_result) {
+                die("Execution failed: " . $stmt_insert_dev->error);
+            }
+
+
+            // delete temporary order
+            $delete_order_sql = "DELETE FROM T_TEMPORARY_ORDER WHERE Order_ID = ?";
             $stmt_delete_order = $this->conn->prepare($delete_order_sql);
-            $stmt_delete_order->bind_param("i", $temp_order_id);
+            $stmt_delete_order->bind_param("s", $temp_order_id);
             $stmt_delete_order->execute();
 
+            //delete temporary devices
+            $delete_dev_sql = "DELETE FROM T_TEMPORARY_ORDER_DEVICES WHERE Order_ID = ?";
+            $stmt_delete_dev = $this->conn->prepare($delete_dev_sql);
+            $stmt_delete_dev->bind_param("s", $temp_order_id);
+            $stmt_delete_dev->execute();
 
         } catch (Exception $e) {
             die("Query failed: " . $e->getMessage());
         }
     }
-
 }
-
-?>
