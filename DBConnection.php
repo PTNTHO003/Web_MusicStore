@@ -4,7 +4,7 @@ class DBConnection {
     private $host = "localhost";
     private $username = "root";
     private $password = "";
-    private $dbname = "AudioShopDB";
+    private $dbname = "AudioStoreDB";
     public $conn;
 
     // Constructor to establish connection

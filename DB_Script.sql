@@ -1,5 +1,5 @@
-create database if not exists `AudioShopDB` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-use `AudioShopDB`;
+create database if not exists `AudioStoreDB` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+use `AudioStoreDB`;
 
 -- Table structure for category
 drop table if exists `T_CATEGORY`;
@@ -53,20 +53,21 @@ create table if not exists `T_EMPLOYEE` (
 
 drop table if exists `T_CUSTOMER`;
 create table if not exists `T_CUSTOMER` (
-	`CUSTOMER_PHONE` VARCHAR(11)  NOT NULL UNIQUE,
+    `CUSTOMER_ID` int(10)  NOT NULL auto_increment,
+	`CUSTOMER_PHONE` varchar(11)  NOT NULL UNIQUE,
     `CUSTOMER_NAME` VARCHAR(255)  NOT NULL,
     `CUSTOMER_EMAIL` VARCHAR(255)  NOT NULL UNIQUE,
     `CUSTOMER_ADDRESS` VARCHAR(255)  NOT NULL,
     `CUSTOMER_ACCOUNT` VARCHAR(255)  NOT NULL unique,
     `CUSTOMER_PASSWORD` VARCHAR(255)  NOT NULL,
-    primary key(`CUSTOMER_PHONE`)
+    primary key(`CUSTOMER_ID`)
 ) ;
 
 -- table structure for order table
 
 drop table if exists `T_ORDER`;
 create table if not exists `T_ORDER` (
-	`ORDER_ID` CHAR(10)  NOT NULL UNIQUE,
+	`ORDER_ID` INT(10) NOT NULL AUTO_INCREMENT,
 	`CUSTOMER_PHONE` VARCHAR(11)  NOT NULL,
     `ORDER_DATETIME` timestamp default CURRENT_TIMESTAMP,
     `ORDER_TOTAL_AMOUNT` decimal(12,2) not null,
@@ -79,7 +80,7 @@ create table if not exists `T_ORDER` (
 
 drop table if exists `T_ORDER-DEVICES`;
 CREATE TABLE IF NOT EXISTS `T_ORDER-DEVICES` (
-    `ORDER_ID` CHAR(10)  NOT NULL,
+    `ORDER_ID` INT(10)  NOT NULL,
     `DEV_ID` INT(10) NOT NULL,
     PRIMARY KEY (`ORDER_ID`, `DEV_ID`),
     FOREIGN KEY (ORDER_ID) REFERENCES T_ORDER(ORDER_ID),
@@ -90,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `T_ORDER-DEVICES` (
 
 DROP TABLE IF EXISTS `T_TEMPORARY_ORDER`;
 CREATE TABLE IF NOT EXISTS `T_TEMPORARY_ORDER` (
-    `TEMP_ORDER_ID` CHAR(10)  NOT NULL UNIQUE,
+    `TEMP_ORDER_ID` INT(10)  NOT NULL AUTO_INCREMENT,
     `CUSTOMER_PHONE` VARCHAR(11) NOT NULL,
     `Order_DateTime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `Total_amount` INT(12),
@@ -103,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `T_TEMPORARY_ORDER` (
 
 DROP TABLE IF EXISTS `T_TEMPORARY_ORDER_DEVICES`;
 CREATE TABLE IF NOT EXISTS `T_TEMPORARY_ORDER_DEVICES` (
-    `TEMP_ORDER_ID` CHAR(10) NOT NULL,
+    `TEMP_ORDER_ID` int(10) NOT NULL,
     `DEV_ID` int(10) NOT NULL,
     PRIMARY KEY (`TEMP_ORDER_ID`, `DEV_ID`),
     FOREIGN KEY (`TEMP_ORDER_ID`) REFERENCES `T_TEMPORARY_ORDER`(`TEMP_ORDER_ID`),
@@ -219,10 +220,8 @@ VALUES
 
 INSERT INTO `T_EMPLOYEE` (`EMP_ID`, `EMP_NAME`, `EMP_PHONE`, `EMP_EMAIL`, `EMP_ACCOUNT`, `EMP_PASSWORD`)
 values
-('tama0001', 'Le Thanh Tam', '0934567890', 'tamam1kaj@gmail.com', 'admin', '123'),
-('thoa0001', 'Pham Thi Ngoc Tho', '0934567190', 'thoam1kaj@gmail.com', 'admin', '123'),
-('longb0001', 'Quyen Chi Long', 'employee', '0734567890', 'long1928271@gmail.com', '123long', 'long123456'),
-('nhanb0002', 'Lan Hoang Nha', 'employee', '0634567890', 'nhan102992@gmail.com', '10009nhan', 'nhan789');
+('tama0001', 'Le Thanh Tam', '0934567890', 'tamam1kaj@gmail.com', 'admin1', '123'),
+('thoa0001', 'Pham Thi Ngoc Tho', '0934567190', 'thoam1kaj@gmail.com', 'admin2', '123');
 
 -- Dumping data into customers table
 

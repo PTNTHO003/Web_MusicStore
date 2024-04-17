@@ -13,14 +13,12 @@
     </header>
 
     <?php
-        $dev_id = $_GET['dev_id'];
-        $dev_name = urldecode($_GET['dev_name']);
         include "Device.php";
         $device = new Device();
-        $brand_name = $device->get_brand($_GET['brand_id']);
+        $dev_result = $device->get_device($_GET['DEV_ID']);
     ?>
 
-    <form name="update" method="post" action="UpdatingHandle.php" enctype="multipart/form-data">
+    <form name="update" method="post" action="UpdateHandle.php" enctype="multipart/form-data">
         <table>
             <tr>
                 <th>Properties</th>
@@ -36,13 +34,19 @@
             <tr>
                 <td> Device Name </td>
                 <td>
-                    <input type="text" name="dev_name" value="<?php echo $dev_name; ?>" disabled="disabled" />
+                    <input type="text" name="dev_name" value="<?php echo $dev_result['DEV_NAME']; ?>" disabled="disabled" />
                 </td>
             </tr>
             <tr>
                 <td> Brand </td>
                 <td>
-                    <input type="text" name="brand_id" value="<?php echo $brand_name; ?>" disabled="disabled" />
+                    <input type="text" name="brand_id" value="<?php echo $dev_result['BRAND_NAME']; ?>" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td> Category </td>
+                <td>
+                    <input type="text" name="cate_id" value="<?php echo $dev_result['CATE_NAME']; ?>" disabled="disabled" />
                 </td>
             </tr>
             <tr>

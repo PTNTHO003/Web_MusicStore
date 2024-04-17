@@ -12,7 +12,7 @@
     <form action="AddingHandle.php" method="post" enctype="multipart/form-data">
         <table>
             <tr>
-                <td>Name of device</td>
+                <td>Name of device </td>
                 <td><input type="text" name="dev_name" required></td>
             </tr>
             <tr>
@@ -23,9 +23,13 @@
                         include "Device.php";
                         $device = new Device();
                         $categories = $device->get_cate_list();
-
-                        foreach ($categories as $category) {
-                            echo "<option value='" . $category['CATE_ID'] . "'>" . $category['CATE_NAME'] . "</option>";
+                        if ($categories === false) {
+                            echo "<option value=''>Error retrieving categories</option>";
+                        } else {
+                            // Display each category as an option in the select dropdown
+                            foreach ($categories as $category) {
+                                echo "<option value='" . $category['CATE_ID'] . "'>" . $category['CATE_NAME'] . "</option>";
+                            }
                         }
                         ?>
                     </select>
@@ -36,12 +40,10 @@
                 <td>
                     <select name="brand_id" required>
                         <?php
-                        include "Device.php";
-                        $device = new Device();
-                        $categories = $device->get_brand_list();
+                        $brands = $device->get_brand_list();
 
-                        foreach ($categories as $category) {
-                            echo "<option value='" . $category['BRAND_ID'] . "'>" . $category['BRAND_NAME'] . "</option>";
+                        foreach ($brands as $brand) {
+                            echo "<option value='" . $brand['BRAND_ID'] . "'>" . $brand['BRAND_NAME'] . "</option>";
                         }
                         ?>
                     </select>

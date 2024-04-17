@@ -58,14 +58,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($brand_name){
         case "SONY":
             $upload_directory .= "SONY/";
+            break;
         case "JBL":
             $upload_directory .= "JBL/";
+            break;
         case "MARSHALL":
             $upload_directory .= "MARSHALL/";
+            break;
         case "BOSE":
             $upload_directory .= "BOSE/";
+            break;
         case "YAMAHA":
             $upload_directory .= "YAMAHA/";
+            break;
     }
     $target_file = $upload_directory . basename($pic_name);
 

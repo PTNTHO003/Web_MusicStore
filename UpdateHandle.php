@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Validate price
-    if (!isset($_POST["dev_price"]) || !is_numeric($_POST["dev_price"])) {
+    if (!isset($_POST['dev_price']) || !is_numeric($_POST['dev_price'])) {
         $errors[] = "Invalid price";
     }
 
@@ -26,33 +26,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     include "Device.php";
     $device = new Device();
+    $dev_info = $device->get_device($_GET['dev_id']);
 
 
-    $old_directory = "img/";
+    $img_directory = "img/";
 
-    $old_brand_name = $device->get_brand($_POST["brand_id"]);
-    $old_brand_name = strtoupper($old_brand_name);
-    switch ($old_brand_name){
+    $brand_name =  $dev_info['BRAND_NAME'];
+    $brand_name = strtoupper($old_brand_name);
+    switch ($old_brand_name) {
         case "SONY":
-            $old_directory .= "SONY/";
+            $img_directory .= "SONY/";
+            break;
         case "JBL":
-            $old_directory .= "JBL/";
+            $img_directory .= "JBL/";
+            break;
         case "MARSHALL":
-            $old_directory .= "MARSHALL/";
+            $img_directory .= "MARSHALL/";
+            break;
         case "BOSE":
-            $old_directory .= "BOSE/";
+            $img_directory .= "BOSE/";
+            break;
         case "YAMAHA":
-            $old_directory .= "YAMAHA/";
+            $img_directory .= "YAMAHA/";
+            break;
     }
 
-    $dev_info = $device->get_device($_POST["dev_id"]);
+    $old_directory = $img_directory . $dev_info['DEV_IMAGEURL'];
 
-    if ($dev_info->num_rows > 0) {
-
-        $row = $dev_info->fetch_assoc();
-    
-        $old_directory .= $row['DEV_IMAGEURL'];
-    }
 
     // Delete the old image of the device
     if (file_exists($old_directory)) {
@@ -71,22 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $file_size = $_FILES['dev_image']['size'];
     $file_type = $_FILES['dev_image']['type'];
 
-    $upload_directory = "img/";
-    $brand_name = $device->get_brand($_POST["brand_id"]);
-    $brand_name = strtoupper($brand_name);
-    switch ($brand_name){
-        case "SONY":
-            $upload_directory .= "SONY/";
-        case "JBL":
-            $upload_directory .= "JBL/";
-        case "MARSHALL":
-            $upload_directory .= "MARSHALL/";
-        case "BOSE":
-            $upload_directory .= "BOSE/";
-        case "YAMAHA":
-            $upload_directory .= "YAMAHA/";
-    }
-    $target_file = $upload_directory . basename($pic_name);
+    $target_file = $img_directory . basename($pic_name);
 
     if (move_uploaded_file($file_tmp_name, $target_file)) {
         echo "<p> Upload image successfully <p>";
@@ -94,11 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error when uploading image.";
     }
 
-    $device->update_device($_POST["dev_id"], $pic_name, $new_dev_price);
-
+    $device->update_device($_POST["dev_id"], $_POST["dev_name"], $_POST["cate_id"], $_POST["brand_id"], $pic_name, $new_dev_price);
 } else {
     // If the form is not submitted via POST method, redirect the user back to the form
     header("Location: UpdateDevice.php");
     exit;
 }
-?>
