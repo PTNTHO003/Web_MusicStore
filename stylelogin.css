@@ -1,0 +1,65 @@
+body {
+    background-color: #f0efec;
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    position: absolute;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.container h2 {
+    text-align: center;
+    color: #333;
+}
+
+.container form {
+    margin-top: 20px;
+}
+
+.container form div {
+    margin-bottom: 15px;
+}
+
+.container form label {
+    display: block;
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin: 0 auto;
+}
+
+.container form input[type="text"],
+.container form input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
+}
+
+.container form button[type="submit"] {
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: rgb(20, 79, 95);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.container form button[type="submit"]:hover {
+    background-color: rgb(18, 54, 64);
+    ;
+}
