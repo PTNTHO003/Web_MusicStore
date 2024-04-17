@@ -15,8 +15,27 @@ session_start();
 
 <body>
     <div class="section section1" id="section1">
-        <img class="user" src="img/user-avt.png"></img>
-        <img class="logo" src="img/logo.jpg"></img>
+        <div class="dropdown">
+            <?php if (!isset($_SESSION['loggedEMP_in']) && !isset($_SESSION['loggedCUS_in'])) { ?>
+                <div class="dropdown-content">
+                    <a href="login.php">Đăng nhập</a>
+                    <a href="signup.php">Đăng ký</a>
+                </div>
+            <?php } ?>
+            <?php if (isset($_SESSION['loggedCUS_in'])) { ?>
+                <div class="dropdown-content">
+                    <a href="ViewIn4.php">Tài khoản</a>
+                    <a href="logout.php">Đăng xuất</a>
+                </div>
+            <?php } ?>
+            <?php if (isset($_SESSION['loggedEMP_in'])) { ?>
+                <div class="dropdown-content">
+                    <a href="logout.php">Đăng xuất</a>
+                </div>
+            <?php } ?>
+        </div>
+        <div id="formContainer"></div>
+        <img class="logo" src="img/logo.png"></img>
         <img class="cart" src="img/cart.png"></img>
         <div class="navi">
             <table>
@@ -38,6 +57,24 @@ session_start();
         </div>
         <img class="background" src="img/background1.jpg" alt="background-img"></img>
     </div>
+    <!-- ------xác nhận là Employee thì hiện fucntion----------- -->
+    <?php
+    // if (isset($_SESSION['loggedEMP_in'])) {
+    //     echo '<script>';
+    //     echo '...';
+    //     echo '</script>';
+    // }
+    ?>
+
+
+    <!-- ------xác nhận là Customer thì hiện fucntion----------- -->
+    <?php
+    // if (isset($_SESSION['loggedCUS_in'])) {
+    //     echo '<script>';
+    //     echo '...';
+    //     echo '</script>';
+    // }
+    ?>
 
     <div class="section2">
         <?php
