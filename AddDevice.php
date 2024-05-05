@@ -26,7 +26,6 @@
                         if ($categories === false) {
                             echo "<option value=''>Error retrieving categories</option>";
                         } else {
-                            // Display each category as an option in the select dropdown
                             foreach ($categories as $category) {
                                 echo "<option value='" . $category['CATE_ID'] . "'>" . $category['CATE_NAME'] . "</option>";
                             }

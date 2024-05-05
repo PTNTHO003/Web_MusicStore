@@ -1,3 +1,11 @@
+body {
+    background-color: #f0efec;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .section {
     width: 80%;
     height: 100vh;
@@ -14,13 +22,43 @@
     position: relative;
 }
 
-.user {
+.dropdown {
+    background-image: url("img/user-avt.png");
+    background-size: cover;
     position: absolute;
     top: 1%;
     left: 5%;
     width: 6%;
     height: 8%;
 }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 120px;
+    background-color: #123640;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: whitesmoke;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+
+}
+
+.dropdown-content a:hover {
+    color: rgb(135, 252, 254);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 
 .logo {
     position: absolute;
@@ -134,27 +172,54 @@ input:hover {
 /* --------------------------section2--------------------------------- */
 
 .section2 {
-    border: solid grey 10px;
+    /* border: solid grey 10px; */
     border-radius: 25px;
     width: 80%;
-    max-height: 500px; 
+    height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ccc;
     scroll-snap-align: start;
+    background-color: #f7f7f7;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
-    padding-left: 5px;
+    padding: 20px;
 }
 
-.product-item {
-    border: #d3edd6 solid;
-    border-radius: 20px;
-    width: 210px; 
-    height: 400px;
-    background-color: #f0f0f0;
-    text-align: center;
-    margin-bottom: 20px;
+
+.btn {
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ddd;
+}
+
+/* Add a dark background to the active button */
+.btn.active {
+    background-color: #666;
+    color: white;
+}
+
+#apply-price-filter {
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* Hiệu ứng chuyển đổi màu nền */
+}
+
+#apply-price-filter:hover {
+    background-color: #45a049;
+    /* Màu nền thay đổi khi di chuột qua */
 }
 
 #product-list.product-list img.product-img {
@@ -164,28 +229,54 @@ input:hover {
 }
 
 #product-list {
-    list-style-type: none; 
-    padding: 0; 
+    list-style-type: none;
+    padding: 0;
     margin: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-
 #product-container {
     align-items: flex-start;
     width: 85%;
     max-height: 500px;
-    overflow-y: scroll; 
+    overflow-y: scroll;
     padding: 5px;
 }
+
+.product-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    width: 220px;
+    height: 450px;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.show {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+}
+
 
 .filter-container {
     border: 5px solid #d3edd6;
     border-radius: 25px;
     background-color: #f0f0f0;
-    padding: 10px;
-    width: 180px;
+    padding: 5px;
+    width: 220px;
+    height: 90%;
+    overflow-y: scroll;
     align-items: center;
 }
